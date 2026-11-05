@@ -1,0 +1,11 @@
+flowchart LR
+    T[Title / Save slots] --> S[Choose starter]
+    T --> L
+    S --> L[Orbital Lab]
+    L -->|Launch, 1 Fuel| P[Planet surface]
+    P -->|Bio-zone step 12%| B[Battle]
+    P -->|Alpha nest| B
+    B -->|Win / Capture / Flee| P
+    B -->|Team defeated| L
+    P -->|Return at pad| L
+    L --- G[Galaxy] & TM[Team] & DX[ExoDex] & R[Research] & F[Fabricator] & M[Missions] & DL[Data Log + SQL]

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ExoDex</title>
+<meta name="description" content="ExoDex - a scientific creature-discovery game. Explore alien planets, scan and capture 220 lifeforms, and build your research database (SQLite).">
+<meta name="theme-color" content="#070b16">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='%2311a2e'/%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%235adcc8' stroke-width='4'/%3E%3Ccircle cx='25' cy='28' r='6' fill='%23fff'/%3E%3Ccircle cx='41' cy='28' r='6' fill='%23fff'/%3E%3Ccircle cx='26' cy='29' r='3' fill='%23111'/%3E%3Ccircle cx='42' cy='29' r='3' fill='%23111'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="web/css/style.css">
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<!-- TITLE -->
+<section id="screen-title" class="screen">
+  <h1 class="logo">EXODEX</h1>
+  <p class="tagline">Xenobiology Survey Program &mdash; land on alien worlds, scan new lifeforms, build the database.</p>
+  <canvas id="parade"></canvas>
+  <div class="slots" id="slots"></div>
+  <div class="title-foot">
+    <label class="btn small">Import save (.db / .json)<input type="file" id="import-file" accept=".db,.sqlite,.json" hidden></label>
+    <a class="btn small" href="https://github.com/JaiGod/exodex" target="_blank" rel="noopener">Source on GitHub</a>
+  </div>
+  <div class="howto panel">
+    <b>How to play.</b> Pick a starter, then launch from the Orbital Lab to a planet. Walk through <b>bio-zones</b>
+    (tall vegetation) to meet wild lifeforms. In battle, <b>Scan</b> to log a species in your ExoDex and collect DNA,
+    weaken it, then <b>Capture</b> it with a pod. Gather glowing <b>resource nodes</b> to craft pods, MedGels and Fuel Cells,
+    spend Research Points on upgrades, and scan more species to unlock new worlds. Each planet hides an <b>Alpha</b>.
+    <br><span class="muted">Keys: WASD / arrows to move &middot; E gather &middot; L lure &middot; R return to orbit &middot; 1-6 battle actions &middot; Space to continue.</span>
+    <div class="engine" id="engine-note"></div>
+  </div>
+</section>
+
+<!-- STARTER -->
+<section id="screen-starter" class="screen">
+  <h2>Choose your first research partner</h2>
+  <input id="player-name" class="name-input" maxlength="16" value="Explorer" aria-label="Explorer name">
+  <div class="starters" id="starters"></div>
+  <div style="display:flex;gap:10px">
+    <button class="btn" id="starter-back">Back</button>
+    <button class="btn primary" id="starter-go">Begin Expedition</button>
+  </div>
+</section>
+
+<!-- LAB -->
+<section id="screen-lab" class="screen">
+  <div class="topbar">
+    <span class="brand">ORBITAL RESEARCH LAB</span>
+    <div class="stats" id="lab-stats"></div>
+  </div>
+  <div class="lab-body">
+    <nav class="tabs" id="tabs"></nav>
+    <main class="tab-content" id="tab-content"></main>
+  </div>
+</section>
+
+<!-- PLANET -->
+<section id="screen-planet" class="screen">
+  <canvas id="planet-canvas"></canvas>
+  <div class="hud panel" id="hud"></div>
+  <div class="team-mini" id="team-mini"></div>
+  <div class="dpad" id="dpad">
+    <button class="u" data-d="0,-1" aria-label="Up">&#9650;</button>
+    <button class="l" data-d="-1,0" aria-label="Left">&#9664;</button>
+    <button class="r" data-d="1,0" aria-label="Right">&#9654;</button>
+    <button class="d" data-d="0,1" aria-label="Down">&#9660;</button>
+  </div>
+  <div class="planet-actions">
+    <button class="btn" id="btn-gather">Gather [E]</button>
+    <button class="btn" id="btn-lure">Lure [L]</button>
+    <button class="btn" id="btn-orbit">Return to Orbit [R]</button>
+  </div>
+</section>
+
+<!-- BATTLE -->
+<section id="screen-battle" class="screen">
+  <canvas id="battle-canvas"></canvas>
+  <div class="binfo panel" id="b-enemy"></div>
+  <div class="binfo panel" id="b-me"></div>
+  <div class="console" id="console">
+    <div class="msgbox panel" id="msgbox"></div>
+    <div class="cmds" id="cmds"></div>
+  </div>
+</section>
+
+<div id="toasts"></div>
+
+<script src="web/data.js"></script>
+<script src="web/js/rng.js"></script>
+<script src="web/js/core.js"></script>
+<script src="web/js/session.js"></script>
+<script src="web/js/store.js"></script>
+<script src="web/js/sprites.js"></script>
+<script src="web/js/ui.js"></script>
+</body>
+</html>

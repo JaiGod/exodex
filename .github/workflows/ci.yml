@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests (game logic, database, procedural generation)
+        run: python -m unittest discover tests -v
+      - name: Dataset and web bundle are up to date
+        run: |
+          python tools/generate_species.py
+          python tools/build_web.py
+          git diff --exit-code data/gamedata.json web/data.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: JavaScript syntax check
+        run: for f in web/js/*.js; do node --check "$f"; done

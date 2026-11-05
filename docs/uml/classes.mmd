@@ -1,0 +1,106 @@
+classDiagram
+    direction LR
+    class GameData {
+        +dict species
+        +dict moves
+        +dict planets
+        +effectiveness(move_type, types) float
+        +starters() list
+        +min_wild_level(species) int
+    }
+    class Species {
+        +int id
+        +str name
+        +str type1
+        +str type2
+        +str kingdom
+        +str rarity
+        +int evolves_to
+        +int evolve_level
+        +moves_at(level) list
+    }
+    class Creature {
+        +Species species
+        +int level
+        +str trait
+        +dict ivs
+        +list moves
+        +int hp
+        +bool aberrant
+        +max_hp() int
+        +gain_xp(amount) list
+        +can_evolve() bool
+        +evolve() str
+    }
+    class Battle {
+        +list team
+        +Creature enemy
+        +bool alpha
+        +str result
+        +act(action) list
+        +damage(user, target, move) tuple
+        +capture_chance(pod) float
+    }
+    class PlanetMap {
+        +Planet planet
+        +list tiles
+        +tuple pad
+        +tuple nest
+        +set nodes
+        +walkable(x, y) bool
+        +harvest(x, y) bool
+    }
+    class Database {
+        +Connection conn
+        +create(path, data, name)$ Database
+        +team() list
+        +add_creature(c, planet_id) int
+        +mark(species_id, ...) dict
+        +journal(kingdom) list
+        +log_battle(...)
+    }
+    class GameSession {
+        +Database db
+        +GameData data
+        +PlanetMap map
+        +travel(planet_id)
+        +step(dx, dy)
+        +gather()
+        +start_battle(enemy) Battle
+        +finish_battle(battle) list
+        +craft(recipe_id)
+        +upgrade_research(id)
+        +sequence_genome(id)
+        +synthesize(species_id)
+        +claim_mission(id)
+    }
+    class Mulberry32 {
+        +random() float
+        +randint(lo, hi) int
+    }
+    class App {
+        +Scene scene
+        +GameSession session
+        +run()
+        +switch(scene)
+    }
+    class Scene {
+        +handle(event)
+        +update(dt)
+        +draw(surface)
+    }
+    GameData "1" o-- "220" Species
+    Creature --> Species
+    Battle o-- Creature
+    GameSession --> Database
+    GameSession --> GameData
+    GameSession --> PlanetMap
+    GameSession ..> Battle : creates
+    PlanetMap ..> Mulberry32 : seeded by
+    Database ..> Creature : persists
+    App --> GameSession
+    App --> Scene
+    Scene <|-- TitleScene
+    Scene <|-- LabScene
+    Scene <|-- PlanetScene
+    Scene <|-- BattleScene

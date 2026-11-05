@@ -1,0 +1,63 @@
+erDiagram
+    species ||--o{ species_moves : learns
+    moves ||--o{ species_moves : "taught by"
+    species |o--o| species : evolves_to
+    species ||--o{ creatures : "instance of"
+    species ||--o| discoveries : "logged as"
+    planets ||--o{ creatures : "caught on"
+    planets ||--o{ discoveries : "first seen on"
+    planets ||--o{ battle_history : "fought on"
+    species ||--o{ battle_history : enemy
+    planets }o--|| species : alpha
+    items ||--o{ inventory : stocked
+    items ||--o{ recipes : output
+    recipes ||--|{ recipe_inputs : needs
+    items ||--o{ recipe_inputs : ingredient
+    items ||--o{ missions : reward
+    player ||--o{ creatures : owns
+
+    species { int id PK
+        text name
+        text type1
+        text type2
+        text kingdom
+        text rarity
+        int evolves_to FK
+        int evolve_level }
+    creatures { int id PK
+        int species_id FK
+        int level
+        int xp
+        text trait
+        int iv_hp
+        int team_slot
+        text moves }
+    discoveries { int species_id PK
+        int seen
+        int scanned
+        int captured
+        int dna
+        int planet_id FK }
+    planets { int id PK
+        text name
+        text biome
+        int unlock_rank
+        int seed
+        int alpha_species FK }
+    player { int id PK
+        text name
+        int rp
+        int current_planet FK
+        int steps }
+    battle_history { int id PK
+        int planet_id FK
+        int enemy_species FK
+        text result
+        int turns }
+    missions { text id PK
+        text kind
+        int goal
+        int progress
+        int claimed }
+    inventory { text item_id PK
+        int qty }

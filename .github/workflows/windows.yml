@@ -1,0 +1,33 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller
+      - name: Build ExoDex.exe
+        run: pyinstaller --noconfirm --onefile --windowed --name ExoDex --add-data "data;data" main.py
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: ExoDex v1.0.0
+          body: |
+            Desktop build of ExoDex (Python + Pygame + SQLite) for Windows.
+            Download ExoDex.exe and double-click it. Saves are written to a `saves` folder next to the exe.
+            Play in your browser: https://jaigod.github.io/exodex/
+          files: dist/ExoDex.exe
+          make_latest: true
